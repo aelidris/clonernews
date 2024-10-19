@@ -1,10 +1,70 @@
-<div id="nav">
-    <button id="top-stories-btn">Top Stories</button>
-    <button id="new-stories-btn">New Stories</button>
-</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hacker News Feed</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    #header {
+      background-color: #ff6600;
+      padding: 10px;
+      text-align: center;
+      color: white;
+    }
+    #posts {
+      margin: 20px;
+    }
+    .post {
+      border-bottom: 1px solid #ddd;
+      padding: 10px 0;
+    }
+    .post h2 {
+      margin: 0;
+    }
+    .post .metadata {
+      font-size: 0.9em;
+      color: #555;
+    }
+    .comments {
+      margin-top: 10px;
+      padding-left: 20px;
+      font-size: 0.9em;
+      color: #333;
+    }
+    .comment {
+      margin-bottom: 10px;
+    }
+    #live-update {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background-color: #ffeb3b;
+      padding: 10px;
+      border: 1px solid #ddd;
+      display: none;
+    }
+  </style>
+</head>
+<body>
 
-<div id="content">
-    <ul id="stories-list"></ul>
-    <div id="story-details"></div>
-    <div id="comments"></div>
-</div>
+  <div id="header">
+    <h1>Hacker News Feed</h1>
+  </div>
+
+  <div id="live-update">
+    New updates available! <button onclick="refreshPosts()">Refresh</button>
+  </div>
+
+  <div id="posts">
+    <!-- Posts will be loaded here -->
+  </div>
+
+  <script src="./clonernews.js"></script>
+
+</body>
+</html>
