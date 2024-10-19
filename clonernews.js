@@ -1,91 +1,73 @@
-// Constants
-const ITEMS_PER_PAGE = 20;
-const UPDATE_INTERVAL = 5000;
-const API_BASE_URL = 'https://hacker-news.firebaseio.com/v0';
+const sourceLink = "https://hacker-news.firebaseio.com/v0/";
+let story, jobs, polls, comments;
 
-// State variables
-let items = [];
-let loading = false;
-let page = 1;
-let liveUpdates = [];
+fetch(sourceLink + 'item/8863.json?print=pretty')
+  .then(response => response.json())
+  .then(data => {
+    story = data;
+    console.log(story);  // Move console.log inside the .then block
+  })
+  .catch((error) => console.log('Error to fetch the data: ', error));
 
-// DOM elements
-const itemsContainer = document.getElementById('items-container');
-const liveUpdatesContainer = document.getElementById('live-updates');
-const loadingIndicator = document.getElementById('loading-indicator');
+  fetch(sourceLink + 'item/192327.json?print=pretty')
+  .then(response => response.json())
+  .then(data => {
+    jobs = data;
+    console.log(jobs);  // Move console.log inside the .then block
+  })
+  .catch((error) => console.log('Error to fetch the data: ', error));
 
-// Fetch items from the API
-async function fetchItems(start, end) {
-    const response = await fetch(`${API_BASE_URL}/newstories.json`);
-    const storyIds = await response.json();
-    const itemPromises = storyIds.slice(start, end).map(id =>
-        fetch(`${API_BASE_URL}/item/${id}.json`).then(res => res.json())
-    );
-    return Promise.all(itemPromises);
+  fetch(sourceLink + 'item/126809.json?print=pretty')
+  .then(response => response.json())
+  .then(data => {
+    polls = data;
+    console.log(polls);  // Move console.log inside the .then block
+  })
+  .catch((error) => console.log('Error to fetch the data: ', error));
+
+  fetch(sourceLink + 'item/2921983.json?print=pretty')
+  .then(response => response.json())
+  .then(data => {
+    comments = data;
+    console.log(comments);  // Move console.log inside the .then block
+  })
+  .catch((error) => console.log('Error to fetch the data: ', error));
+
+  const postsContainer = document.getElementById('posts');
+// Example function to render a single post
+function renderPost(postData) {
+    const postElement = document.createElement('div');
+    postElement.classList.add('post');
+
+    const title = document.createElement('div');
+    title.classList.add('post-title');
+    title.textContent = postData.title;
+
+    const author = document.createElement('div');
+    author.classList.add('post-author');
+    author.textContent = `By: ${postData.by}, Type: ${postData.type}`;
+
+    postElement.appendChild(title);
+    postElement.appendChild(author);
+
+    // Add a button to load comments later
+    const showCommentsButton = document.createElement('button');
+    showCommentsButton.textContent = 'Show Comments';
+    showCommentsButton.onclick = () => loadComments(postData.id, postElement);
+    postElement.appendChild(showCommentsButton);
+
+    postsContainer.appendChild(postElement);
 }
 
-// Load more items
-async function loadMoreItems() {
-    if (loading) return;
-    loading = true;
-    loadingIndicator.style.display = 'block';
-
-    const start = (page - 1) * ITEMS_PER_PAGE;
-    const end = page * ITEMS_PER_PAGE;
-    const newItems = await fetchItems(start, end);
-    
-    items = [...items, ...newItems];
-    renderItems(newItems);
-    
-    loading = false;
-    loadingIndicator.style.display = 'none';
-    page++;
+// Fetch posts from Hacker News API (just an example with a specific ID)
+function fetchPost(postId) {
+    fetch(`https://hacker-news.firebaseio.com/v0/item/${postId}.json?print=pretty`)
+        .then(response => response.json())
+        .then(postData => renderPost(postData))
+        .catch(error => console.error('Error fetching post:', error));
 }
 
-// Render items to the DOM
-function renderItems(newItems) {
-    newItems.forEach(item => {
-        const itemElement = document.createElement('div');
-        itemElement.className = 'item';
-        itemElement.innerHTML = `
-            <h2>${item.title}</h2>
-            <p>By ${item.by} | ${new Date(item.time * 1000).toLocaleString()}</p>
-            ${item.url ? `<a href="${item.url}" target="_blank" rel="noopener noreferrer">Read more</a>` : ''}
-            ${item.text ? `<p>${item.text}</p>` : ''}
-            ${item.kids ? `<p>${item.kids.length} comment${item.kids.length !== 1 ? 's' : ''}</p>` : ''}
-        `;
-        itemsContainer.appendChild(itemElement);
-    });
-}
+// Fetch a few posts for demonstration
+fetchPost(8863);  // Sample post ID (Dropbox story)
+fetchPost(2921983);  // Another post
 
-// Fetch live updates
-async function fetchLiveUpdates() {
-    const response = await fetch(`${API_BASE_URL}/updates.json`);
-    const updates = await response.json();
-    liveUpdates = updates.items.slice(0, 5);
-    renderLiveUpdates();
-}
-
-// Render live updates to the DOM
-function renderLiveUpdates() {
-    liveUpdatesContainer.innerHTML = liveUpdates.length > 0
-        ? `<h3>Live Updates</h3><ul>${liveUpdates.map(id => `<li>New item: ${id}</li>`).join('')}</ul>`
-        : '<p>No new updates</p>';
-}
-
-// Handle scroll event for infinite scrolling
-function handleScroll() {
-    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) {
-        loadMoreItems();
-    }
-}
-
-// Initialize the app
-function init() {
-    loadMoreItems();
-    setInterval(fetchLiveUpdates, UPDATE_INTERVAL);
-    window.addEventListener('scroll', handleScroll);
-}
-
-// Start the app
-init();

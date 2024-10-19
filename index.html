@@ -1,32 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hacker News UI</title>
-    <style>
-        /* Add your styles here */
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            padding: 20px;
-        }
-        .item {
-            border-bottom: 1px solid #ccc;
-            padding: 10px 0;
-        }
-        #loading-indicator {
-            text-align: center;
-            display: none;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hacker News Feed</title>
+  <link ref="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Hacker News</h1>
-    <div id="live-updates"></div>
-    <div id="items-container"></div>
-    <div id="loading-indicator">Loading more items...</div>
-    <script src="script.js"></script>
+
+  <div id="header">
+    <h1>Hacker News Feed</h1>
+  </div>
+
+  <div id="live-update">
+    New updates available! <button onclick="refreshPosts()">Refresh</button>
+  </div>
+
+  <div id="posts">
+    <!-- Posts will be loaded here -->
+  </div>
+  
+
+  <script src="clonernews.js"></script>
+
 </body>
 </html>
