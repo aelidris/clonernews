@@ -4,76 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Top Stories - Hacker News</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f9f9f9;
-        }
-
-        h1 {
-            text-align: center;
-            color: #333;
-        }
-
-        .container {
-            display: flex; /* Use Flexbox to align children horizontally */
-            justify-content: space-between; /* Space between the two containers */
-            max-width: 1200px; /* Set a max-width for the main container */
-            margin: 0 auto; /* Center the container */
-        }
-
-        .story-container, .job-container {
-            flex: 0 0 48%; /* Allow both containers to take 48% of the available width */
-            margin: 10px; /* Add some space between containers */
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .story, .job {
-            margin-bottom: 20px;
-            padding: 10px;
-            border-bottom: 1px solid #eee;
-        }
-
-        .story:last-child, .job:last-child {
-            border-bottom: none;
-        }
-
-        .story h3, .job h3 {
-            margin: 0;
-            color: #007BFF;
-        }
-
-        .story p, .job p {
-            margin: 5px 0;
-            color: #555;
-        }
-
-        .story a, .job a {
-            color: #007BFF;
-            text-decoration: none;
-        }
-
-        .story a:hover, .job a:hover {
-            text-decoration: underline;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
     </head>
 <body>
 
-    <h1>Top Stories from Hacker News</h1>
-    <div class="story-container" id="storyContainer"></div>
+    <h1>Hacker News Stories and Jobs</h1>
+    <div class="main-container">
+        <div class="content-section">
+            <h1>Top Stories from Hacker News</h1>
+            <div class="story-container" id="storyContainer"></div>
+        </div>
 
-    <h1>Job from Hacker News</h1>
-    <div class="job-container" id="jobContainer"></div>
+        <div class="content-section">
+            <h1>Job from Hacker News</h1>
+            <div class="job-container" id="jobContainer"></div>
+        </div>
 
-    <script src="clonernews.js">
-        
-    </script>
+        <div class="content-section">
+            <h1>Poll from Hacker News</h1>
+            <div class="poll-container" id="pollContainer"></div>
+        </div>
+    </div>
+
+    <script src="clonernews.js"> </script>
 
 </body>
 </html>

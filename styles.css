@@ -8,34 +8,42 @@ h1 {
     text-align: center;
     color: #333;
 }
-.story-container {
-    max-width: 800px;
+.main-container {
+    display: flex;
+    justify-content: space-between;
+    max-width: 1200px;
     margin: 0 auto;
+}
+.content-section {
+    flex: 1;
+    margin: 10px;
+}
+.story-container, .job-container, .poll-container {
+    padding: 20px;
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    padding: 20px;
 }
-.story {
+.story, .job, .poll {
     margin-bottom: 20px;
     padding: 10px;
     border-bottom: 1px solid #eee;
 }
-.story:last-child {
+.story:last-child, .job:last-child, .poll:last-child {
     border-bottom: none;
 }
-.story h3 {
+.story h3, .job h3, .poll h3 {
     margin: 0;
     color: #007BFF;
 }
-.story p {
+.story p, .job p, .poll p {
     margin: 5px 0;
     color: #555;
 }
-.story a {
+.story a, .job a, .poll a {
     color: #007BFF;
     text-decoration: none;
 }
-.story a:hover {
+.story a:hover, .job a:hover, .poll a:hover {
     text-decoration: underline;
 }
