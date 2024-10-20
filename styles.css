@@ -11,7 +11,7 @@ h1 {
 .main-container {
     display: flex;
     justify-content: space-between;
-    max-width: 1200px;
+    max-width: auto;
     margin: 0 auto;
 }
 .content-section {

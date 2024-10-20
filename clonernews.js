@@ -70,7 +70,7 @@ async function displayJobStories(jobIds) {
             jobDiv.innerHTML = `
                 <h3>${job.title}</h3>
                 <p><strong>By:</strong> ${job.by} | <strong>Score:</strong> ${job.score}</p>
-                <p>${job.text ? job.text: ''}</p>
+                <p>${job.text ?  '<b>The job description: </b>'+job.text : ''}</p>
                 <p>${job.url ? `<a href="${job.url}" target="_blank">Read more</a>` : ''}</p>
             `;
             jobContainer.appendChild(jobDiv);
