@@ -1,73 +1,79 @@
 const sourceLink = "https://hacker-news.firebaseio.com/v0/";
-let story, jobs, polls, comments;
+let topStories = [];
+let jobStories = []; // You will need this to fetch job stories
 
-fetch(sourceLink + 'item/8863.json?print=pretty')
-  .then(response => response.json())
-  .then(data => {
-    story = data;
-    console.log(story);  // Move console.log inside the .then block
-  })
-  .catch((error) => console.log('Error to fetch the data: ', error));
+// Fetch the top stories (IDs only) when the page loads
+fetch(sourceLink + 'topstories.json')
+    .then(response => response.json())
+    .then(data => {
+        topStories = data.slice(0, 10); // Load only the first 10 stories for now
+        displayTopStories(topStories);  // Call to display the stories
+    })
+    .catch((error) => console.log('Error fetching the top stories: ', error));
 
-  fetch(sourceLink + 'item/192327.json?print=pretty')
-  .then(response => response.json())
-  .then(data => {
-    jobs = data;
-    console.log(jobs);  // Move console.log inside the .then block
-  })
-  .catch((error) => console.log('Error to fetch the data: ', error));
+// Fetch the job stories (IDs only) when the page loads
+fetch(sourceLink + 'jobstories.json')
+    .then(response => response.json())
+    .then(data => {
+        jobStories = data.slice(0, 10); // Load only the first 10 job stories for now
+        displayJobStories(jobStories); // Call to display job stories
+    })
+    .catch((error) => console.log('Error fetching the job stories: ', error));
 
-  fetch(sourceLink + 'item/126809.json?print=pretty')
-  .then(response => response.json())
-  .then(data => {
-    polls = data;
-    console.log(polls);  // Move console.log inside the .then block
-  })
-  .catch((error) => console.log('Error to fetch the data: ', error));
-
-  fetch(sourceLink + 'item/2921983.json?print=pretty')
-  .then(response => response.json())
-  .then(data => {
-    comments = data;
-    console.log(comments);  // Move console.log inside the .then block
-  })
-  .catch((error) => console.log('Error to fetch the data: ', error));
-
-  const postsContainer = document.getElementById('posts');
-// Example function to render a single post
-function renderPost(postData) {
-    const postElement = document.createElement('div');
-    postElement.classList.add('post');
-
-    const title = document.createElement('div');
-    title.classList.add('post-title');
-    title.textContent = postData.title;
-
-    const author = document.createElement('div');
-    author.classList.add('post-author');
-    author.textContent = `By: ${postData.by}, Type: ${postData.type}`;
-
-    postElement.appendChild(title);
-    postElement.appendChild(author);
-
-    // Add a button to load comments later
-    const showCommentsButton = document.createElement('button');
-    showCommentsButton.textContent = 'Show Comments';
-    showCommentsButton.onclick = () => loadComments(postData.id, postElement);
-    postElement.appendChild(showCommentsButton);
-
-    postsContainer.appendChild(postElement);
+// Function to fetch a story by ID (for top stories)
+async function fetchTopStory(storyId) {
+    const storyUrl = `https://hacker-news.firebaseio.com/v0/item/${storyId}.json`;
+    const response = await fetch(storyUrl);
+    const storyData = await response.json();
+    return storyData;
 }
 
-// Fetch posts from Hacker News API (just an example with a specific ID)
-function fetchPost(postId) {
-    fetch(`https://hacker-news.firebaseio.com/v0/item/${postId}.json?print=pretty`)
-        .then(response => response.json())
-        .then(postData => renderPost(postData))
-        .catch(error => console.error('Error fetching post:', error));
+// Function to display the top stories
+async function displayTopStories(storyIds) {
+    const storyContainer = document.getElementById('storyContainer');
+    storyContainer.innerHTML = ''; // Clear any existing content
+
+    for (let id of storyIds) {
+        const story = await fetchTopStory(id);
+        if (story) {
+            const storyDiv = document.createElement('div');
+            storyDiv.classList.add('story');
+            storyDiv.innerHTML = `
+                <h3>${story.title}</h3>
+                <p><strong>By:</strong> ${story.by} | <strong>Score:</strong> ${story.score}</p>
+                <p>${story.text ? story.text : ''}</p>
+                <p>${story.url ? `<a href="${story.url}" target="_blank">Read more</a>` : ''}</p>
+            `;
+            storyContainer.appendChild(storyDiv);
+        }
+    }
 }
 
-// Fetch a few posts for demonstration
-fetchPost(8863);  // Sample post ID (Dropbox story)
-fetchPost(2921983);  // Another post
+// Function to fetch a job story by ID
+async function fetchJobStory(jobId) {
+    const jobUrl = `https://hacker-news.firebaseio.com/v0/item/${jobId}.json`;
+    const response = await fetch(jobUrl);
+    const jobData = await response.json();
+    return jobData;
+}
 
+// Function to display job stories
+async function displayJobStories(jobIds) {
+    const jobContainer = document.getElementById('jobContainer');
+    jobContainer.innerHTML = ''; // Clear any existing content
+
+    for (let id of jobIds) {
+        const job = await fetchJobStory(id);
+        if (job) {
+            const jobDiv = document.createElement('div');
+            jobDiv.classList.add('job');
+            jobDiv.innerHTML = `
+                <h3>${job.title}</h3>
+                <p><strong>By:</strong> ${job.by} | <strong>Score:</strong> ${job.score}</p>
+                <p>${job.text ? job.text: ''}</p>
+                <p>${job.url ? `<a href="${job.url}" target="_blank">Read more</a>` : ''}</p>
+            `;
+            jobContainer.appendChild(jobDiv);
+        }
+    }
+}
